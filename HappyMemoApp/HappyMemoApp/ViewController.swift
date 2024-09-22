@@ -13,15 +13,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        let label = UILabel()
-        label.text = "Hello, Code-based UI!"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+//        let label = UILabel()
+//        label.text = "Hello, Code-based UI!"
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(label)
+//        
+//        NSLayoutConstraint.activate([
+//            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+//        ])
     }
 }
-
