@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MemoTableViewController: UITableViewController {
+class MemoTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let memolist: [Memo] = [
     Memo(title: "해피의 쇼핑 목록", content: "우유, 빵, 달걀"),
@@ -16,45 +16,82 @@ class MemoTableViewController: UITableViewController {
     Memo(title: "해피의 여행 계획", content: "숙소 예약, 관광지 조사")
     ]
     
+    let titleLabel = UILabel()
+    let tableView = UITableView()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        
+        // 타이틀 설정
+        titleLabel.text = "해피 메모장"
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        titleLabel.textColor = .black
+        titleLabel.textAlignment = .center
+        
+        // 타이틀 오토레이아웃 설정
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(titleLabel)
+        
+        // 테이블 뷰 설정
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MemoCell")
-
-        navigationController?.isNavigationBarHidden = true
-        //title = "해피 메모장"
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        // 테이블 뷰 오토레이아웃 설정
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        
+        setupConstraints()
+        //navigationItem.title = "해피 메모장"
+    }
+    
+    func setupConstraints() {
+        // 타이틀 레이블 오토레이아웃
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 60) // 타이틀 높이 설정
+        ])
+        
+        // 테이블 뷰 오토레이아웃
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor), // 타이틀 아래에 위치
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor) // 하단 고정
+        ])
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return memolist.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath)
         let memo = memolist[indexPath.row]
         
         cell.textLabel?.text = memo.title
         return cell
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMemo = memolist[indexPath.row]
         
         let detailVC = MemoDetailViewController()
         detailVC.memo = selectedMemo
         navigationController?.pushViewController(detailVC, animated: true)
     }
-
-
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

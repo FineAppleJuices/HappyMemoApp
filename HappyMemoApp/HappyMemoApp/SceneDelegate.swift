@@ -17,10 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let memoTableViewController = MemoTableViewController()
-        //let navigationController = UINavigationController(rootViewController: memoTableViewController)
         
         window?.rootViewController = memoTableViewController
-        //navigationController
         window?.makeKeyAndVisible()
     }
 
