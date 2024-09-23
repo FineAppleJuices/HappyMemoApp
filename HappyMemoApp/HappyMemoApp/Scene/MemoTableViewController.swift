@@ -36,7 +36,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         view.addSubview(titleLabel)
         
         // 테이블 뷰 설정
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MemoCell")
+        tableView.register(MemoCell.self, forCellReuseIdentifier: "MemoCell")
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -44,8 +44,11 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
+        // 자동 높이 설정
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
+        
         setupConstraints()
-        //navigationItem.title = "해피 메모장"
     }
     
     func setupConstraints() {
@@ -77,19 +80,16 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath) as! MemoCell
         let memo = memolist[indexPath.row]
         
-        cell.textLabel?.text = memo.title
+        cell.titleLabel.text = memo.title
+        cell.contentLabel.text = memo.content
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMemo = memolist[indexPath.row]
-        
-        let detailVC = MemoDetailViewController()
-        detailVC.memo = selectedMemo
-        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     /*
