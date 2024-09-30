@@ -9,7 +9,7 @@ import UIKit
 
 class MemoTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    let memolist: [Memo] = [
+    var memolist: [Memo] = [
     Memo(title: "해피의 쇼핑 목록", content: "우유, 빵, 달걀"),
     Memo(title: "해피의 할 일", content: "운동가기, 책 반납하기"),
     Memo(title: "해피의 회의 안건", content: "프로젝트 진행상황 공유"),
@@ -49,6 +49,20 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         tableView.estimatedRowHeight = 100
         
         setupConstraints()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addMemo))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.systemBlue
+        
+    }
+    
+    @objc private func addMemo() {
+        let memoCreateVC = MemoCreateViewController()
+        memoCreateVC.onSave = { [weak self] memo in
+            self?.memolist.append(memo)
+            self?.tableView.reloadData()
+        }
+        let navigationController = UINavigationController(rootViewController:  memoCreateVC)
+        present(navigationController, animated: true, completion: nil)
     }
     
     func setupConstraints() {

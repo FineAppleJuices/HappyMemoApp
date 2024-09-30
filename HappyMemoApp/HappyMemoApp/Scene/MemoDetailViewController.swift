@@ -44,7 +44,6 @@ class MemoDetailViewController: UIViewController {
             contentLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),// 타이틀 아래에 바로 붙임
             contentLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16), // 왼쪽 여백
             contentLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16), // 오른쪽 여백
-//            contentLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0) // 하단 여백
         ])
         
         // 메모 데이터가 있는 경우 레이블 업데이트
