@@ -35,7 +35,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
-        // 테이블 뷰 설정
+        // 테이블 뷰 설정, 테이블 뷰에 기본 셀 등록
         tableView.register(MemoCell.self, forCellReuseIdentifier: "MemoCell")
         tableView.dataSource = self
         tableView.delegate = self
@@ -90,6 +90,10 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMemo = memolist[indexPath.row]
+        
+        let detailVC = MemoDetailViewController()
+        detailVC.memo = selectedMemo // 선택한 메모 전달
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     /*

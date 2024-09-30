@@ -14,6 +14,7 @@
 		2469C27C2C8F113000F5042D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469C27B2C8F113000F5042D /* SceneDelegate.swift */; };
 		2469C2832C8F113100F5042D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2469C2822C8F113100F5042D /* Assets.xcassets */; };
 		2469C2862C8F113100F5042D /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 2469C2852C8F113100F5042D /* Base */; };
+		24E65E822CAA57B9004B2FAD /* MemoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E65E812CAA57B9004B2FAD /* MemoDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		2469C2822C8F113100F5042D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2469C2852C8F113100F5042D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2469C2872C8F113100F5042D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24E65E812CAA57B9004B2FAD /* MemoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			children = (
 				2469C27B2C8F113000F5042D /* SceneDelegate.swift */,
 				244516BE2C9C0130003C2CE3 /* MemoTableViewController.swift */,
+				24E65E812CAA57B9004B2FAD /* MemoDetailViewController.swift */,
 				244516C22CA09277003C2CE3 /* MemoCell.swift */,
 				244516B82C9BE1C7003C2CE3 /* Model.swift */,
 			);
@@ -157,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				244516BF2C9C0130003C2CE3 /* MemoTableViewController.swift in Sources */,
+				24E65E822CAA57B9004B2FAD /* MemoDetailViewController.swift in Sources */,
 				244516C32CA09277003C2CE3 /* MemoCell.swift in Sources */,
 				2469C27A2C8F113000F5042D /* AppDelegate.swift in Sources */,
 				2469C27C2C8F113000F5042D /* SceneDelegate.swift in Sources */,
