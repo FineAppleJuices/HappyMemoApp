@@ -10,7 +10,7 @@ import UIKit
 class MemoCreateViewController: UIViewController {
     
     let titleTextField = UITextField()
-    let contentTextField = UITextField()
+    let contentTextView = UITextView()
     let saveButton = UIButton(type: .system)
     var onSave: ((Memo) -> Void)?
     
@@ -37,12 +37,11 @@ class MemoCreateViewController: UIViewController {
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleTextField)
         
-        contentTextField.layer.borderColor = UIColor.lightGray.cgColor // 테두리 색상
-        contentTextField.placeholder = ""
-        contentTextField.layer.borderWidth = 1.0 // 테두리 두께
-        contentTextField.layer.cornerRadius = 5.0 // 모서리 둥글게
-        contentTextField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(contentTextField)
+        contentTextView.layer.borderColor = UIColor.lightGray.cgColor // 테두리 색상
+        contentTextView.layer.borderWidth = 1.0 // 테두리 두께
+        contentTextView.layer.cornerRadius = 5.0 // 모서리 둥글게
+        contentTextView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(contentTextView)
         
         setupConstraints()
     }
@@ -53,10 +52,10 @@ class MemoCreateViewController: UIViewController {
             titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            contentTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
-            contentTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentTextField.heightAnchor.constraint(equalToConstant: 600) 
+            contentTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
+            contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            contentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            contentTextView.heightAnchor.constraint(equalToConstant: 600) 
         ])
     }
     
@@ -66,7 +65,7 @@ class MemoCreateViewController: UIViewController {
     
     @objc private func saveMemo() {
         guard let title = titleTextField.text, !title.isEmpty,
-              let content = contentTextField.text, !content.isEmpty else { return }
+              let content = contentTextView.text, !content.isEmpty else { return }
         
         let newMemo = Memo(title: title, content: content)
         onSave?(newMemo)

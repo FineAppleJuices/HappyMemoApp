@@ -61,6 +61,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             self?.memolist.append(memo)
             self?.tableView.reloadData()
         }
+        // 별도의 뷰 계층구조를 따로 설정
         let navigationController = UINavigationController(rootViewController:  memoCreateVC)
         present(navigationController, animated: true, completion: nil)
     }
