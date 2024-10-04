@@ -8,17 +8,17 @@
 import UIKit
 
 class MemoTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     var memolist: [Memo] = [
-    Memo(title: "해피의 쇼핑 목록", content: "우유, 빵, 달걀"),
-    Memo(title: "해피의 할 일", content: "운동가기, 책 반납하기"),
-    Memo(title: "해피의 회의 안건", content: "프로젝트 진행상황 공유"),
-    Memo(title: "해피의 여행 계획", content: "숙소 예약, 관광지 조사")
+        Memo(title: "해피의 쇼핑 목록", content: "우유, 빵, 달걀"),
+        Memo(title: "해피의 할 일", content: "운동가기, 책 반납하기"),
+        Memo(title: "해피의 회의 안건", content: "프로젝트 진행상황 공유"),
+        Memo(title: "해피의 여행 계획", content: "숙소 예약, 관광지 조사")
     ]
     
     let titleLabel = UILabel()
     let tableView = UITableView()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,17 +83,17 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor) // 하단 고정
         ])
     }
-
+    
     // MARK: - Table view data source
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return memolist.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath) as! MemoCell
         let memo = memolist[indexPath.row]
@@ -102,7 +102,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         cell.contentLabel.text = memo.content
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedMemo = memolist[indexPath.row]
         
@@ -111,49 +111,77 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // "삭제" 액션 생성
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { (action, view, completionHandler) in
+            
+            // 삭제 확인 알림창
+            let alert = UIAlertController(title: "삭제 확인", message: "이 메모를 삭제하시겠습니까?", preferredStyle: .actionSheet)
+            let confirmDelete = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                self.memolist.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            
+            alert.addAction(confirmDelete)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+            
+            completionHandler(true)
+        }
+        
+        // "삭제" 텍스트 커스텀 액션을 구성
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
     }
-    */
-
+    
+    // delete 수정 불가한 기본 editingStyle 방식
+    //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    //        if editingStyle == .delete {
+    //            let alert = UIAlertController(title: "삭제 확인", message: "이 메모를 삭제하시겠습니까?", preferredStyle: .actionSheet)
+    //            let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+    //                self.memolist.remove(at: indexPath.row)
+    //                tableView.deleteRows(at: [indexPath], with: .automatic)
+    //            }
+    //            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+    //
+    //            alert.addAction(deleteAction)
+    //            alert.addAction(cancelAction)
+    //
+    //            present(alert, animated: true, completion: nil)
+    //        }
+    //    }
+    
     /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
+     // Override to support conditional editing of the table view.
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
     /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
 }
