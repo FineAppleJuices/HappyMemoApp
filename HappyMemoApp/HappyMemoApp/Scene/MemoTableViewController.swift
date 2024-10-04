@@ -112,6 +112,27 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        // "편집" 액션 생성
+        let editAction = UIContextualAction(style: .normal, title: "편집") { [weak self] (action, view, completionHandler) in
+            guard let self = self else { return }
+            let memoToEdit = self.memolist[indexPath.row]
+            
+            // AddView 재활용: 편집 화면을 모달로 표시
+            let memoCreateVC = MemoCreateViewController()
+            memoCreateVC.memo = memoToEdit
+            memoCreateVC.onSave = { [weak self] updatedMemo in
+                self?.memolist[indexPath.row] = updatedMemo
+                self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+            
+            let navigationController = UINavigationController(rootViewController: memoCreateVC)
+            self.present(navigationController, animated: true, completion: {
+                completionHandler(true) // 액션 완료 후 호출
+            })
+        }
+        editAction.backgroundColor = .systemBlue
+        
         // "삭제" 액션 생성
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { (action, view, completionHandler) in
             
@@ -120,18 +141,19 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             let confirmDelete = UIAlertAction(title: "삭제", style: .destructive) { _ in
                 self.memolist.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+                completionHandler(true)
             }
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+                completionHandler(false) // 취소 후 완료 호출
+            }
             
             alert.addAction(confirmDelete)
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
-            
-            completionHandler(true)
         }
         
-        // "삭제" 텍스트 커스텀 액션을 구성
-        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        // "편집, 삭제" 텍스트 커스텀 액션을 구성
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         return configuration
     }
     

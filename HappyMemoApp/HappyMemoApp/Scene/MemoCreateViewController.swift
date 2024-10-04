@@ -9,6 +9,7 @@ import UIKit
 
 class MemoCreateViewController: UIViewController {
     
+    var memo: Memo?
     let titleTextField = UITextField()
     let contentTextView = UITextView()
     let saveButton = UIButton(type: .system)
@@ -20,7 +21,7 @@ class MemoCreateViewController: UIViewController {
         view.backgroundColor = .white
         setupUI()
         
-        navigationItem.title = "새 메모"
+        navigationItem.title = memo == nil ? "새 메모" : "메모 편집"
         
         // 취소 버튼 설정
         let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancel))
@@ -29,6 +30,12 @@ class MemoCreateViewController: UIViewController {
         // 저장 버튼 설정
         let saveButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(saveMemo))
         navigationItem.rightBarButtonItem = saveButton
+        
+        // 기존 메모 내용이 있으면 텍스트 필드와 텍스트 뷰에 설정
+        if let memo = memo {
+            titleTextField.text = memo.title
+            contentTextView.text = memo.content
+        }
     }
     
     private func setupUI() {
