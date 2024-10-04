@@ -16,10 +16,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        let memoTableViewController = MemoTableViewController()
-        let navigationController = UINavigationController(rootViewController: memoTableViewController)
+        let tabBarController = UITabBarController()
         
-        window?.rootViewController = navigationController
+        let memoVC = MemoTableViewController()
+        let memonavigationController = UINavigationController(rootViewController: memoVC)
+        memoVC.tabBarItem = UITabBarItem(title: "메모", image: UIImage(systemName: "note.text"), tag: 0)
+        
+        let settingVC = SettingViewController()
+        let settingNavigationController = UINavigationController(rootViewController: settingVC)
+        settingVC.tabBarItem = UITabBarItem(title: "설정", image: UIImage(systemName: "gear"), tag: 1)
+        
+        tabBarController.viewControllers = [memonavigationController, settingNavigationController]
+                
+        window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
 
