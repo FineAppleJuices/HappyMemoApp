@@ -7,13 +7,33 @@
 
 import UIKit
 
-class MemoCreateViewController: UIViewController {
+class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return Category.allCases.count
+    }
+    // MARK: - UIPickerViewDelegate
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return Category.allCases[row].rawValue // 각 행에 카테고리 이름 반환
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedCategory = Category.allCases[row] // 선택된 카테고리 저장
+    }
     
     var memo: Memo?
+    var onSave: ((Memo) -> Void)?
+    
     let titleTextField = UITextField()
     let contentTextView = UITextView()
     let saveButton = UIButton(type: .system)
-    var onSave: ((Memo) -> Void)?
+    let categoryPicker = UIPickerView()
+    var selectedCategory: Category = .work // 기본 선택 카테고리
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +55,15 @@ class MemoCreateViewController: UIViewController {
         if let memo = memo {
             titleTextField.text = memo.title
             contentTextView.text = memo.content
+            selectedCategory = memo.category
+        }
+        
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
+        
+        // 기존 메모가 있을 경우, 해당 카테고리로 PickerView를 설정
+        if let index = Category.allCases.firstIndex(of: selectedCategory) {
+            categoryPicker.selectRow(index, inComponent: 0, animated: false)
         }
     }
     
@@ -50,6 +79,9 @@ class MemoCreateViewController: UIViewController {
         contentTextView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentTextView)
         
+        categoryPicker.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(categoryPicker)
+        
         setupConstraints()
     }
     
@@ -62,7 +94,12 @@ class MemoCreateViewController: UIViewController {
             contentTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
             contentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             contentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentTextView.heightAnchor.constraint(equalToConstant: 600) 
+            contentTextView.heightAnchor.constraint(equalToConstant: 200),
+            
+            categoryPicker.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 16),
+            categoryPicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoryPicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+                        
         ])
     }
     
@@ -74,7 +111,7 @@ class MemoCreateViewController: UIViewController {
         guard let title = titleTextField.text, !title.isEmpty,
               let content = contentTextView.text, !content.isEmpty else { return }
         
-        let newMemo = Memo(title: title, content: content)
+        let newMemo = Memo(title: title, content: content, category: selectedCategory)
         onSave?(newMemo)
         dismiss(animated: true, completion: nil)
     }

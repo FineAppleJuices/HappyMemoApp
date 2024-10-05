@@ -7,7 +7,20 @@
 
 import UIKit
 
-struct Memo {
-    let title: String
-    let content: String
+enum Category: String, CaseIterable {
+    case work = "업무"
+    case personal = "개인"
+    case ideas = "아이디어"
+    case todos = "할 일"
+    
+    static var orderedCategories: [Category] {
+        return [.personal, .ideas, .work, .todos]
+    }
+}
+
+struct Memo: Equatable {
+    var id: String = UUID().uuidString
+    var title: String
+    var content: String
+    var category: Category
 }

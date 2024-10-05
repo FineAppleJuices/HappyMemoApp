@@ -17,17 +17,28 @@ class MemoCell: UITableViewCell {
         
         // 타이틀 레이블 설정
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
         
         // 내용 레이블 설정
         contentLabel.font = UIFont.systemFont(ofSize: 14)
         contentLabel.textColor = .gray
         contentLabel.numberOfLines = 0
-        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 서브뷰 추가
+        contentView.addSubview(titleLabel)
         contentView.addSubview(contentLabel)
         
+        // 제약 조건 설정
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         setupConstraints()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // 구분선 색상 및 위치 설정
+        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        self.backgroundColor = .white // 배경색
     }
     
     required init?(coder: NSCoder) {
