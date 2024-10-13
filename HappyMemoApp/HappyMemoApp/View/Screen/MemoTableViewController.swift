@@ -82,13 +82,6 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         memoCreateVC.onSave = { savedMemo in
             self.coreDataManager.createMemo(memo: savedMemo)
             self.fetchSavedMemos()
-//            if let index = self.memolist.firstIndex(where: { $0.id == savedMemo.id }) {
-//                self.memolist[index] = savedMemo // 수정된 메모 반영
-//            } else {
-//                self.memolist.append(savedMemo) // 새로운 메모 추가
-//            }
-//            self.categorizeMemos()
-//            self.tableView.reloadData()
         }
         // 별도의 뷰 계층구조를 따로 설정
         let navigationController = UINavigationController(rootViewController:  memoCreateVC)
