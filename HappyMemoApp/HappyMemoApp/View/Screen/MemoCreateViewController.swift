@@ -9,9 +9,9 @@ import UIKit
 
 class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    var memoList: [Memo] = []
-    var memo: Memo? // 옵셔널이면 편집, 아니면 새 메모(형태는 똑같은데 내용의 여부만 다를 때)
-    var onSave: ((Memo) -> Void)?
+    var memoList: [MemoModel] = []
+    var memo: MemoModel? // 옵셔널이면 편집, 아니면 새 메모(형태는 똑같은데 내용의 여부만 다를 때)
+    var onSave: ((MemoModel) -> Void)?
     
     let titleTextField = UITextField()
     let contentTextView = UITextView()
@@ -116,7 +116,7 @@ class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPicker
             memoList[index].category = selectedCategory
             onSave?(memoList[index])
         } else {
-            let newMemo = Memo(id: UUID().uuidString, title: titleTextField.text ?? "", content: contentTextView.text ?? "", category: selectedCategory)
+            let newMemo = MemoModel(id: UUID().uuidString, title: titleTextField.text ?? "", content: contentTextView.text ?? "", category: selectedCategory)
             memoList.append(newMemo)
             onSave?(newMemo)
         }

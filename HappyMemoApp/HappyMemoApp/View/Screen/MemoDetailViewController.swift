@@ -9,7 +9,7 @@ import UIKit
 
 class MemoDetailViewController: UIViewController {
     
-    var memo: Memo?
+    var memo: MemoModel?
     
     let titleLabel = UILabel()
     let contentLabel = UILabel()

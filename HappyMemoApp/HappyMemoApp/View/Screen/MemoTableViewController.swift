@@ -6,21 +6,18 @@
 //
 
 import UIKit
+import CoreData
 
 class MemoTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var memolist: [Memo] = [
-        Memo(title: "해피의 쇼핑 목록", content: "우유, 빵, 계란", category: .personal),
-        Memo(title: "해피의 아이디어", content: "AR을 활용한 학습 앱", category: .ideas),
-        Memo(title: "해피의 회의 준비", content: "프레젠테이션 자료 준비", category: .work),
-        Memo(title: "해피의 프로젝트 마감일", content: "다음주 금요일까지", category: .work),
-        Memo(title: "해피의 운동 계획", content: "주 3회 러닝", category: .todos)
-    ]
+    var memolist: [MemoModel] = []
     
-    private var categorizedMemos: [(category: Category, memos: [Memo])] = []
+    private var categorizedMemos: [(category: Category, memos: [MemoModel])] = []
     
     let titleLabel = UILabel()
     let tableView = UITableView()
+    
+    let coreDataManager = CoreDataManager()
     
     
     override func viewDidLoad() {
@@ -32,12 +29,18 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         setupTitleLabel()
         setupTableView()
         setupConstraints()
+        
+        fetchSavedMemos()
+    }
+    private func fetchSavedMemos() {
+        memolist = coreDataManager.fetchAllMemos() // Core Data에서 메모 리스트 불러오기
         categorizeMemos()
+        tableView.reloadData()
     }
     
     private func categorizeMemos() {
         // 카테고리별로 메모를 정렬하고, memolist 순서에 맞춰 카테고리를 유지
-        var tempCategorizedMemos: [Category: [Memo]] = [:]
+        var tempCategorizedMemos: [Category: [MemoModel]] = [:]
         
         for memo in memolist {
             tempCategorizedMemos[memo.category, default: []].append(memo)
@@ -56,10 +59,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
-        
         titleLabel.backgroundColor = .white
-        
-        // 타이틀 오토레이아웃 설정
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
     }
@@ -69,12 +69,9 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         tableView.register(MemoCell.self, forCellReuseIdentifier: "MemoCell")
         tableView.dataSource = self
         tableView.delegate = self
-        
-        // 테이블 뷰 오토레이아웃 설정
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        
-        // 네비게이션 바 버튼 설정
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addMemo))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.systemBlue
     }
@@ -83,13 +80,15 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         let memoCreateVC = MemoCreateViewController()
         memoCreateVC.memoList = memolist
         memoCreateVC.onSave = { savedMemo in
-            if let index = self.memolist.firstIndex(where: { $0.id == savedMemo.id }) {
-                self.memolist[index] = savedMemo // 수정된 메모 반영
-            } else {
-                self.memolist.append(savedMemo) // 새로운 메모 추가
-            }
-            self.categorizeMemos()
-            self.tableView.reloadData()
+            self.coreDataManager.createMemo(memo: savedMemo)
+            self.fetchSavedMemos()
+//            if let index = self.memolist.firstIndex(where: { $0.id == savedMemo.id }) {
+//                self.memolist[index] = savedMemo // 수정된 메모 반영
+//            } else {
+//                self.memolist.append(savedMemo) // 새로운 메모 추가
+//            }
+//            self.categorizeMemos()
+//            self.tableView.reloadData()
         }
         // 별도의 뷰 계층구조를 따로 설정
         let navigationController = UINavigationController(rootViewController:  memoCreateVC)
@@ -102,15 +101,15 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 60) // 타이틀 높이 설정
+            titleLabel.heightAnchor.constraint(equalToConstant: 60)
         ])
         
         // 테이블 뷰 오토레이아웃
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor), // 타이틀 아래에 위치
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor) // 하단 고정
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -132,16 +131,15 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         cell.contentLabel.text = memo.content
           
         let separatorView = UIView()
-           separatorView.backgroundColor = .gray // 구분선 색상
+           separatorView.backgroundColor = .gray
            separatorView.translatesAutoresizingMaskIntoConstraints = false
            cell.contentView.addSubview(separatorView)
 
-           // 오토레이아웃 설정
            NSLayoutConstraint.activate([
-            separatorView.heightAnchor.constraint(equalToConstant: 0.2), // 구분선 높이
+            separatorView.heightAnchor.constraint(equalToConstant: 0.2),
                separatorView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
                separatorView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
-               separatorView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor) // 셀 하단에 위치
+               separatorView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
            ])
 
         return cell
@@ -159,11 +157,10 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         
         headerView.addSubview(label)
         
-        // 레이블 오토레이아웃 설정
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8), // 상단 여백 추가
-            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16), // 왼쪽 여백 추가
-            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8) // 하단 여백 추가
+            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
+            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
         ])
         
         // 구분선 추가
@@ -206,11 +203,13 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             memoCreateVC.memo = memoToEdit
             memoCreateVC.onSave = { [weak self] updatedMemo in
                 guard let self = self else { return }
-                if let index = self.memolist.firstIndex(where: { $0.id == updatedMemo.id }) {
-                    self.memolist[index] = updatedMemo
-                    self.categorizeMemos() // 카테고리 다시 구분
-                    self.tableView.reloadData()
-                }
+                self.coreDataManager.updateMemo(memo: updatedMemo)
+                self.fetchSavedMemos()
+//                if let index = self.memolist.firstIndex(where: { $0.id == updatedMemo.id }) {
+//                    self.memolist[index] = updatedMemo
+//                    self.categorizeMemos() // 카테고리 다시 구분
+//                    self.tableView.reloadData()
+//                }
             }
             
             let navigationController = UINavigationController(rootViewController: memoCreateVC)
@@ -236,7 +235,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             let confirmDelete = UIAlertAction(title: "삭제", style: .destructive) { _ in
                 
                 let memoToDelete = memosInCategory[indexPath.row]
-                
+                self.coreDataManager.deleteMemo(memo: memoToDelete)
                 self.categorizedMemos[indexPath.section].memos.remove(at: indexPath.row)
                 
                 if let index = self.memolist.firstIndex(where: { $0.id == memoToDelete.id }) {

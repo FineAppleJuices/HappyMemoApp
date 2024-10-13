@@ -12,6 +12,10 @@
 		244516C32CA09277003C2CE3 /* MemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244516C22CA09277003C2CE3 /* MemoCell.swift */; };
 		24594CA22CAFBE8B003794D3 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24594CA12CAFBE8B003794D3 /* SettingViewController.swift */; };
 		24594CA42CB009ED003794D3 /* SettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24594CA32CB009ED003794D3 /* SettingDetailViewController.swift */; };
+		2469ADD82CBBB0A300EA6D03 /* MemoModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2469ADD62CBBB0A300EA6D03 /* MemoModel.xcdatamodeld */; };
+		2469ADDB2CBBCCEC00EA6D03 /* MemoEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469ADD92CBBCCEC00EA6D03 /* MemoEntity+CoreDataClass.swift */; };
+		2469ADDC2CBBCCEC00EA6D03 /* MemoEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469ADDA2CBBCCEC00EA6D03 /* MemoEntity+CoreDataProperties.swift */; };
+		2469ADDE2CBBF7EA00EA6D03 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469ADDD2CBBF7DE00EA6D03 /* CoreDataManager.swift */; };
 		2469C27A2C8F113000F5042D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469C2792C8F113000F5042D /* AppDelegate.swift */; };
 		2469C27C2C8F113000F5042D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469C27B2C8F113000F5042D /* SceneDelegate.swift */; };
 		2469C2832C8F113100F5042D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2469C2822C8F113100F5042D /* Assets.xcassets */; };
@@ -26,6 +30,10 @@
 		244516C22CA09277003C2CE3 /* MemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCell.swift; sourceTree = "<group>"; };
 		24594CA12CAFBE8B003794D3 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		24594CA32CB009ED003794D3 /* SettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailViewController.swift; sourceTree = "<group>"; };
+		2469ADD72CBBB0A300EA6D03 /* MemoModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MemoModel.xcdatamodel; sourceTree = "<group>"; };
+		2469ADD92CBBCCEC00EA6D03 /* MemoEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2469ADDA2CBBCCEC00EA6D03 /* MemoEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MemoEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2469ADDD2CBBF7DE00EA6D03 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		2469C2762C8F113000F5042D /* HappyMemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HappyMemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2469C2792C8F113000F5042D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2469C27B2C8F113000F5042D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +87,7 @@
 		24594CA02CAFBDFC003794D3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2469ADD62CBBB0A300EA6D03 /* MemoModel.xcdatamodeld */,
 				244516B82C9BE1C7003C2CE3 /* Model.swift */,
 			);
 			path = Model;
@@ -87,6 +96,9 @@
 		2469C26D2C8F113000F5042D = {
 			isa = PBXGroup;
 			children = (
+				2469ADD92CBBCCEC00EA6D03 /* MemoEntity+CoreDataClass.swift */,
+				2469ADDA2CBBCCEC00EA6D03 /* MemoEntity+CoreDataProperties.swift */,
+				2469ADDD2CBBF7DE00EA6D03 /* CoreDataManager.swift */,
 				2469C2782C8F113000F5042D /* HappyMemoApp */,
 				2469C2772C8F113000F5042D /* Products */,
 			);
@@ -191,8 +203,12 @@
 				24594CA42CB009ED003794D3 /* SettingDetailViewController.swift in Sources */,
 				24E65E842CAA5FDF004B2FAD /* MemoCreateViewController.swift in Sources */,
 				2469C27A2C8F113000F5042D /* AppDelegate.swift in Sources */,
+				2469ADDE2CBBF7EA00EA6D03 /* CoreDataManager.swift in Sources */,
 				2469C27C2C8F113000F5042D /* SceneDelegate.swift in Sources */,
 				244516B92C9BE1C7003C2CE3 /* Model.swift in Sources */,
+				2469ADD82CBBB0A300EA6D03 /* MemoModel.xcdatamodeld in Sources */,
+				2469ADDB2CBBCCEC00EA6D03 /* MemoEntity+CoreDataClass.swift in Sources */,
+				2469ADDC2CBBCCEC00EA6D03 /* MemoEntity+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +421,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2469ADD62CBBB0A300EA6D03 /* MemoModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2469ADD72CBBB0A300EA6D03 /* MemoModel.xcdatamodel */,
+			);
+			currentVersion = 2469ADD72CBBB0A300EA6D03 /* MemoModel.xcdatamodel */;
+			name = MemoModel.xcdatamodeld;
+			path = HappyMemoApp/MemoModel.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2469C26E2C8F113000F5042D /* Project object */;
 }
