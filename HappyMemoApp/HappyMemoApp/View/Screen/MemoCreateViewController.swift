@@ -9,6 +9,16 @@ import UIKit
 
 class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    var memoList: [Memo] = []
+    var memo: Memo? // 옵셔널이면 편집, 아니면 새 메모(형태는 똑같은데 내용의 여부만 다를 때)
+    var onSave: ((Memo) -> Void)?
+    
+    let titleTextField = UITextField()
+    let contentTextView = UITextView()
+    let saveButton = UIButton(type: .system)
+    let categoryPicker = UIPickerView()
+    var selectedCategory: Category = .work // 기본 선택 카테고리
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -25,15 +35,6 @@ class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPicker
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedCategory = Category.allCases[row] // 선택된 카테고리 저장
     }
-    
-    var memo: Memo?
-    var onSave: ((Memo) -> Void)?
-    
-    let titleTextField = UITextField()
-    let contentTextView = UITextView()
-    let saveButton = UIButton(type: .system)
-    let categoryPicker = UIPickerView()
-    var selectedCategory: Category = .work // 기본 선택 카테고리
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,15 +105,22 @@ class MemoCreateViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @objc private func cancel() {
-        dismiss(animated: true, completion: nil) // 모달 닫기
+        dismiss(animated: true, completion: nil)
     }
     
     @objc private func saveMemo() {
-        guard let title = titleTextField.text, !title.isEmpty,
-              let content = contentTextView.text, !content.isEmpty else { return }
+        // 편집 모드
+        if let index = memoList.firstIndex(where: { $0.id == memo?.id }) {
+            memoList[index].title = titleTextField.text ?? ""
+            memoList[index].content = contentTextView.text ?? ""
+            memoList[index].category = selectedCategory
+            onSave?(memoList[index])
+        } else {
+            let newMemo = Memo(id: UUID().uuidString, title: titleTextField.text ?? "", content: contentTextView.text ?? "", category: selectedCategory)
+            memoList.append(newMemo)
+            onSave?(newMemo)
+        }
         
-        let newMemo = Memo(title: title, content: content, category: selectedCategory)
-        onSave?(newMemo)
         dismiss(animated: true, completion: nil)
     }
 }

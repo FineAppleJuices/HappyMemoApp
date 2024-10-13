@@ -81,10 +81,15 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
     
     @objc private func addMemo() {
         let memoCreateVC = MemoCreateViewController()
-        memoCreateVC.onSave = { [weak self] memo in
-            self?.memolist.append(memo)
-            self?.categorizeMemos()
-            self?.tableView.reloadData()
+        memoCreateVC.memoList = memolist
+        memoCreateVC.onSave = { savedMemo in
+            if let index = self.memolist.firstIndex(where: { $0.id == savedMemo.id }) {
+                self.memolist[index] = savedMemo // 수정된 메모 반영
+            } else {
+                self.memolist.append(savedMemo) // 새로운 메모 추가
+            }
+            self.categorizeMemos()
+            self.tableView.reloadData()
         }
         // 별도의 뷰 계층구조를 따로 설정
         let navigationController = UINavigationController(rootViewController:  memoCreateVC)
@@ -125,9 +130,7 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
         
         cell.titleLabel.text = memo.title
         cell.contentLabel.text = memo.content
-        
-//        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) // 왼쪽 끝까지
-//        
+          
         let separatorView = UIView()
            separatorView.backgroundColor = .gray // 구분선 색상
            separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -196,9 +199,10 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             
             let selectedCategory = self.categorizedMemos[indexPath.section].category
             let memoToEdit = self.categorizedMemos[indexPath.section].memos[indexPath.row]
-            
+
             // AddView 재활용: 편집 화면을 모달로 표시
             let memoCreateVC = MemoCreateViewController()
+            memoCreateVC.memoList = self.memolist
             memoCreateVC.memo = memoToEdit
             memoCreateVC.onSave = { [weak self] updatedMemo in
                 guard let self = self else { return }
@@ -230,7 +234,14 @@ class MemoTableViewController: UIViewController, UITableViewDataSource, UITableV
             // 삭제 확인 알림창
             let alert = UIAlertController(title: "삭제 확인", message: "이 메모를 삭제하시겠습니까?", preferredStyle: .actionSheet)
             let confirmDelete = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                
+                let memoToDelete = memosInCategory[indexPath.row]
+                
                 self.categorizedMemos[indexPath.section].memos.remove(at: indexPath.row)
+                
+                if let index = self.memolist.firstIndex(where: { $0.id == memoToDelete.id }) {
+                    self.memolist.remove(at: index)
+                }
                 
                 // 섹션이 비어있으면 섹션을 삭제
                 if self.categorizedMemos[indexPath.section].memos.isEmpty == true {
