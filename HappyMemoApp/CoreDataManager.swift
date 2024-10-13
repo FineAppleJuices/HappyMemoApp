@@ -10,7 +10,7 @@ import CoreData
 
 class CoreDataManager {
     static let shared = CoreDataManager()
-    // 모델의 이름고 같은지 확인
+    // 모델의 이름과 같은지 확인
     let persistentContainer =  NSPersistentContainer(name: "MemoModel")
     
     init() {
